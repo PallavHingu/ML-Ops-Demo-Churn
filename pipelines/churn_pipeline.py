@@ -71,6 +71,7 @@ def preprocess_component(
 def train_component(
     X_in: Input[Artifact],
     y_in: Input[Artifact],
+    force_rerun: str,
     model_artifact: Output[Artifact],
 ):
     import numpy as np, joblib, shutil, os, scipy.sparse
@@ -145,6 +146,7 @@ def churn_pipeline():
     train = train_component(
         X_in=preprocess.outputs["X_out"],
         y_in=preprocess.outputs["y_out"],
+        force_rerun=str(datetime.utcnow()),
     )
 
     evaluate = evaluate_component(
