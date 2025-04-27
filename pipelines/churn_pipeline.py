@@ -12,14 +12,14 @@ from kfp.dsl import component, Output, Input, Dataset, Model, Artifact
 # ---------- wrappers --------------------------------------------------
 
 @component(
-    base_image="python:3.10",
-    packages_to_install=[
-        "mlops",              # our repo (already in image but needed when local)
-        "pandas",
-        "google-cloud-bigquery",
-        "google-cloud-storage",
-        "pyarrow"
-    ],
+    base_image="europe-west2-docker.pkg.dev/mlops-demo-churn/mlops-custom-images/churn-mlops-base:latest",
+    # packages_to_install=[
+    #     "mlops",              # our repo (already in image but needed when local)
+    #     "pandas",
+    #     "google-cloud-bigquery",
+    #     "google-cloud-storage",
+    #     "pyarrow"
+    # ],
 )
 def ingest_component(output_data: Output[Dataset]):
     """Reads BigQuery → writes CSV artefact."""
@@ -31,13 +31,13 @@ def ingest_component(output_data: Output[Dataset]):
 
 
 @component(
-    base_image="python:3.10",
-    packages_to_install=[
-        "mlops",
-        "pandas",
-        "scikit-learn",
-        "joblib"
-    ],
+    base_image="europe-west2-docker.pkg.dev/mlops-demo-churn/mlops-custom-images/churn-mlops-base:latest",
+    # packages_to_install=[
+    #     "mlops",
+    #     "pandas",
+    #     "scikit-learn",
+    #     "joblib"
+    # ],
 )
 def preprocess_component(
     raw_data: Input[Dataset],
@@ -59,8 +59,8 @@ def preprocess_component(
 
 
 @component(
-    base_image="python:3.10",
-    packages_to_install=["mlops", "scikit-learn", "joblib", "numpy"],
+    base_image="europe-west2-docker.pkg.dev/mlops-demo-churn/mlops-custom-images/churn-mlops-base:latest",
+    # packages_to_install=["mlops", "scikit-learn", "joblib", "numpy"],
 )
 def train_component(
     X_in: Input[Artifact],
@@ -78,8 +78,8 @@ def train_component(
 
 
 @component(
-    base_image="python:3.10",
-    packages_to_install=["mlops", "scikit-learn", "joblib", "numpy"],
+    base_image="europe-west2-docker.pkg.dev/mlops-demo-churn/mlops-custom-images/churn-mlops-base:latest",
+    # packages_to_install=["mlops", "scikit-learn", "joblib", "numpy"],
 )
 def evaluate_component(
     model_artifact: Input[Artifact],
@@ -101,8 +101,8 @@ def evaluate_component(
 
 
 @component(
-    base_image="python:3.10",
-    packages_to_install=["mlops", "google-cloud-aiplatform"],
+    base_image="europe-west2-docker.pkg.dev/mlops-demo-churn/mlops-custom-images/churn-mlops-base:latest",
+    # packages_to_install=["mlops", "google-cloud-aiplatform"],
 )
 def register_component(model_artifact: Input[Artifact]) -> str:
     from mlops.model.registry import ModelRegistrar
@@ -111,8 +111,8 @@ def register_component(model_artifact: Input[Artifact]) -> str:
 
 
 @component(
-    base_image="python:3.10",
-    packages_to_install=["mlops", "google-cloud-aiplatform"],
+    base_image="europe-west2-docker.pkg.dev/mlops-demo-churn/mlops-custom-images/churn-mlops-base:latest",
+    # packages_to_install=["mlops", "google-cloud-aiplatform"],
 )
 def deploy_component(model_name: str) -> str:
     from mlops.deploy.deployer import ModelDeployer

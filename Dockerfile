@@ -17,9 +17,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy code
+COPY setup.py /app/
 COPY src/ ./src/
 
 # Install code so 'mlops' package is available
-RUN pip install -e ./src
+RUN pip install -e .
 
 ENV PYTHONPATH=/app/src
