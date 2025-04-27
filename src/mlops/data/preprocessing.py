@@ -20,7 +20,7 @@ class DataPreprocessor(BaseComponent):
         num_cols = X.select_dtypes(exclude=['object']).columns.tolist()
 
         pre = ColumnTransformer([
-            ('cat', OneHotEncoder(handle_unknown='ignore'), cat_cols),
+            ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_cols),
             ('num', StandardScaler(), num_cols)
         ])
         pipe = Pipeline([('pre', pre)])
