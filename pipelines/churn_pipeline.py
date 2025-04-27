@@ -45,7 +45,7 @@ def preprocess_component(
     y_out: Output[Artifact],
     prep_pipe: Output[Artifact],
 ):
-    import pandas as pd, numpy as np, joblib, tempfile
+    import pandas as pd, numpy as np, joblib, shutil, tempfile
     from mlops.data.preprocessing import DataPreprocessor
 
     df = pd.read_csv(raw_data.path)
@@ -55,7 +55,7 @@ def preprocess_component(
     # Save numpy arrays for downstream steps
     np.save(X_out.path, X)
     np.save(y_out.path, y)
-    joblib.copy(pipe_path, prep_pipe.path)
+    shutil.copy(pipe_path, prep_pipe.path)
 
 
 @component(
@@ -67,14 +67,14 @@ def train_component(
     y_in: Input[Artifact],
     model_artifact: Output[Artifact],
 ):
-    import numpy as np, joblib, os
+    import numpy as np, joblib, shutil, os
     from mlops.model.trainer import ModelTrainer
 
     X = np.load(X_in.path, allow_pickle=True)
     y = np.load(y_in.path, allow_pickle=True)
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
-    joblib.copy(model_path, model_artifact.path)
+    shutil.copy(model_path, model_artifact.path)
 
 
 @component(
@@ -87,7 +87,7 @@ def evaluate_component(
     y_in: Input[Artifact],
     accuracy: Output[Artifact],
 ):
-    import joblib, numpy as np, json
+    import joblib, shutil, numpy as np, json
     from mlops.model.evaluator import ModelEvaluator
 
     clf = joblib.load(model_artifact.path)
@@ -96,7 +96,7 @@ def evaluate_component(
     evaluator = ModelEvaluator()
     metrics, metrics_path = evaluator.run(clf, X, y)
     # json.dump(metrics, open(metrics_out.path, "w"))
-    joblib.copy(metrics, accuracy)
+    shutil.copy(metrics, accuracy)
 
 
 
