@@ -82,6 +82,9 @@ def train_component(
     X = np.load(X_in.path + ".npy", allow_pickle=True)
     y = np.load(y_in.path + ".npy", allow_pickle=True)
 
+    if scipy.sparse.issparse(X):
+        X = X.toarray()
+
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
     shutil.copy(model_path, model_artifact.path)
@@ -133,7 +136,7 @@ def deploy_component(model_name: str) -> str:
 @dsl.pipeline(name="churn_pipeline", description="End‑to‑end churn prediction (Vertex)")
 def churn_pipeline():
     from datetime import datetime
-    
+
     ingest = ingest_component()
     preprocess = preprocess_component(raw_data=ingest.outputs["output_data"], force_rerun=str(datetime.utcnow()))
 
