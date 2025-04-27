@@ -41,6 +41,7 @@ def ingest_component(output_data: Output[Dataset]):
 )
 def preprocess_component(
     raw_data: Input[Dataset],
+    force_rerun: str,
     X_out: Output[Artifact],
     y_out: Output[Artifact],
     prep_pipe: Output[Artifact],
@@ -80,7 +81,7 @@ def train_component(
     # y = np.load(y_in.path, allow_pickle=True)
     X = np.load(X_in.path + ".npy", allow_pickle=True)
     y = np.load(y_in.path + ".npy", allow_pickle=True)
-    
+
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
     shutil.copy(model_path, model_artifact.path)
@@ -131,8 +132,10 @@ def deploy_component(model_name: str) -> str:
 
 @dsl.pipeline(name="churn_pipeline", description="End‑to‑end churn prediction (Vertex)")
 def churn_pipeline():
+    from datetime import datetime
+    
     ingest = ingest_component()
-    preprocess = preprocess_component(raw_data=ingest.outputs["output_data"])
+    preprocess = preprocess_component(raw_data=ingest.outputs["output_data"], force_rerun=str(datetime.utcnow()))
 
     train = train_component(
         X_in=preprocess.outputs["X_out"],
