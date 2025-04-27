@@ -45,7 +45,7 @@ def preprocess_component(
     y_out: Output[Artifact],
     prep_pipe: Output[Artifact],
 ):
-    import pandas as pd, numpy as np, joblib, shutil, tempfile
+    import pandas as pd, numpy as np, joblib, shutil, tempfile, os
     from mlops.data.preprocessing import DataPreprocessor
 
     df = pd.read_csv(raw_data.path)
@@ -53,8 +53,14 @@ def preprocess_component(
     X, y, pipe_path = pre.run(df)
 
     # Save numpy arrays for downstream steps
-    np.save(X_out.path, X)
-    np.save(y_out.path, y)
+    # np.save(X_out.path, X)
+    # np.save(y_out.path, y)
+    X_save_path = X_out.path + ".npy"
+    y_save_path = y_out.path + ".npy"
+
+    np.save(X_save_path, X)
+    np.save(y_save_path, y)
+
     shutil.copy(pipe_path, prep_pipe.path)
 
 
@@ -70,8 +76,11 @@ def train_component(
     import numpy as np, joblib, shutil, os
     from mlops.model.trainer import ModelTrainer
 
-    X = np.load(X_in.path, allow_pickle=True)
-    y = np.load(y_in.path, allow_pickle=True)
+    # X = np.load(X_in.path, allow_pickle=True)
+    # y = np.load(y_in.path, allow_pickle=True)
+    X = np.load(X_in.path + ".npy", allow_pickle=True)
+    y = np.load(y_in.path + ".npy", allow_pickle=True)
+    
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
     shutil.copy(model_path, model_artifact.path)
