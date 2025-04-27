@@ -41,7 +41,6 @@ def ingest_component(output_data: Output[Dataset]):
 )
 def preprocess_component(
     raw_data: Input[Dataset],
-    force_rerun: str,
     X_out: Output[Artifact],
     y_out: Output[Artifact],
     prep_pipe: Output[Artifact],
@@ -138,7 +137,7 @@ def churn_pipeline():
     from datetime import datetime
 
     ingest = ingest_component()
-    preprocess = preprocess_component(raw_data=ingest.outputs["output_data"], force_rerun=str(datetime.utcnow()))
+    preprocess = preprocess_component(raw_data=ingest.outputs["output_data"])
 
     train = train_component(
         X_in=preprocess.outputs["X_out"],
