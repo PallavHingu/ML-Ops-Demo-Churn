@@ -74,7 +74,7 @@ def train_component(
     y_in: Input[Artifact],
     model_artifact: Output[Artifact],
 ):
-    import numpy as np, joblib, shutil, os
+    import numpy as np, joblib, shutil, os, scipy.sparse
     from mlops.model.trainer import ModelTrainer
 
     # X = np.load(X_in.path, allow_pickle=True)
