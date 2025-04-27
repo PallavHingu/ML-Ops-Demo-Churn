@@ -24,4 +24,6 @@ jobs:
 
     - run: pip install -r requirements.txt
     # - run: pytest
-    - run: python pipelines/submit_pipeline.py
+    - run: python pipelines/kfp_compile.py
+    - name: Submit Vertex AI Pipeline (Python SDK)
+      run: python pipelines/submit_pipeline.py
