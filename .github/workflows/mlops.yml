@@ -24,12 +24,4 @@ jobs:
 
     - run: pip install -r requirements.txt
     # - run: pytest
-    - run: python pipelines/kfp_compile.py
-    - run: |
-        gcloud ai pipeline-jobs create \
-          --project=${{ secrets.GCP_PROJECT }} \
-          --region=$REGION \
-          --display-name="ci-${{ github.sha }}" \
-          --pipeline-root=gs://${{ secrets.GCP_PROJECT }}-pipeline-root \
-          --template-file=churn_pipeline.yaml \
-          --service-account=vertex-pipelines-sa@${{ secrets.GCP_PROJECT }}.iam.gserviceaccount.com
+    - run: python pipelines/submit_pipeline.py
