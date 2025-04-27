@@ -1,0 +1,9 @@
+project_id: mlops-demo-churn
+region: europe-west2
+bq_dataset: churn_demo
+bq_table: raw
+bucket_data: gs://mlops-demo-churn-data
+bucket_pipeline_root: gs://mlops-demo-churn-pipeline-root
+model_display_name: churn-model
+endpoint_display_name: churn-endpoint
+accuracy_threshold: 0.85
