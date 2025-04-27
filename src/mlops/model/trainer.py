@@ -8,7 +8,11 @@ class ModelTrainer(BaseComponent):
     def run(self, X: np.ndarray, y: np.ndarray):
         self.log.info("Training GradientBoostingClassifier…")
         clf = GradientBoostingClassifier(random_state=42)
+        self.log.info("..")
+        self.log.info(str(type(X)))
+        self.log.info(str(type(y)))
         clf.fit(X, y)
+        self.log.info("Trained GradientBoostingClassifier…")
         with tempfile.NamedTemporaryFile(delete=False, suffix='.joblib') as fp:
             joblib.dump(clf, fp.name)
         return clf, fp.name

@@ -84,6 +84,9 @@ def train_component(
     if scipy.sparse.issparse(X):
         X = X.toarray()
 
+    if scipy.sparse.issparse(y):
+        y = y.toarray()
+
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
     shutil.copy(model_path, model_artifact.path)
