@@ -14,7 +14,6 @@ def submit_pipeline():
         display_name="churn-pipeline-ci",
         template_path=pipeline_file,
         pipeline_root=staging_bucket,
-        service_account=service_account,
         enable_caching=True,
     )
     job.run(sync=True)
