@@ -19,10 +19,13 @@ class DataPreprocessor(BaseComponent):
         cat_cols = X.select_dtypes(include=['object']).columns.tolist()
         num_cols = X.select_dtypes(exclude=['object']).columns.tolist()
 
-        pre = ColumnTransformer([
+        pre = ColumnTransformer(
+            transformers=[
             ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_cols),
             ('num', StandardScaler(), num_cols)
-        ])
+            ],
+            sparse_threshold=0
+        )
         pipe = Pipeline([('pre', pre)])
         X_processed = pipe.fit_transform(X)
 
