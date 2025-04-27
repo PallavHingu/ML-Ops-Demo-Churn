@@ -26,7 +26,7 @@ jobs:
     # - run: pytest
     - run: python pipelines/kfp_compile.py
     - run: |
-        gcloud ai pipelines run \
+        gcloud ai pipeline-jobs create \
           --project=${{ secrets.GCP_PROJECT }} \
           --region=$REGION \
           --display-name="ci-${{ github.sha }}" \
