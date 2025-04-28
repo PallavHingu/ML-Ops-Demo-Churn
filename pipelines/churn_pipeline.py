@@ -82,11 +82,17 @@ def train_component(
     X = np.load(X_in.path + ".npy", allow_pickle=True)
     y = np.load(y_in.path + ".npy", allow_pickle=True)
 
+    print(f"X type: {type(X)}, is sparse: {scipy.sparse.issparse(X)}")
+    print(f"y type: {type(y)}, shape: {y.shape}")
+
     if scipy.sparse.issparse(X):
         X = X.toarray()
 
     if scipy.sparse.issparse(y):
         y = y.toarray()
+
+    print(f"X1 type: {type(X)}, is sparse: {scipy.sparse.issparse(X)}")
+    print(f"y1 type: {type(y)}, shape: {y.shape}")
 
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
