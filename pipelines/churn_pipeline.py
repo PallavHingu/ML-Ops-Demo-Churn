@@ -63,6 +63,9 @@ def preprocess_component(
         print("Detected loaded y as a sparse matrix: converting to dense array…")
         y = y.toarray()
 
+    print(f"Sample y[0] type: {type(y[0])}")
+    print(f"Sample y[0]: {y[0]}")
+
     # Save numpy arrays for downstream steps
     # np.save(X_out.path, X)
     # np.save(y_out.path, y)
