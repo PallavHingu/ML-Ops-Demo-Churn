@@ -45,12 +45,19 @@ def preprocess_component(
     y_out: Output[Artifact],
     prep_pipe: Output[Artifact],
 ):
-    import pandas as pd, numpy as np, joblib, shutil, tempfile, os
+    import pandas as pd, numpy as np, joblib, shutil, tempfile, os, scipy.sparse
     from mlops.data.preprocessing import DataPreprocessor
 
     df = pd.read_csv(raw_data.path)
     pre = DataPreprocessor()
     X, y, pipe_path = pre.run(df)
+
+    if isinstance(X, scipy.sparse.spmatrix):
+        print("Detected loaded X as a sparse matrix: converting to dense array…")
+        X = X.toarray()
+    elif isinstance(X, np.ndarray) and X.dtype == object:
+        print("Detected X as an object array: stacking sparse rows…")
+        X = scipy.sparse.vstack(X).toarray()
 
     # Save numpy arrays for downstream steps
     # np.save(X_out.path, X)
@@ -79,8 +86,8 @@ def train_component(
 
     # X = np.load(X_in.path, allow_pickle=True)
     # y = np.load(y_in.path, allow_pickle=True)
-    X = np.load(X_in.path, allow_pickle=True)
-    y = np.load(y_in.path, allow_pickle=True)
+    X = np.load(X_in.path + ".npy", allow_pickle=True)
+    y = np.load(y_in.path + ".npy", allow_pickle=True)
 
     # Fix: handle different X loading cases
     if isinstance(X, scipy.sparse.spmatrix):
