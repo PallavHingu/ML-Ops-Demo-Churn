@@ -32,4 +32,4 @@ class DataPreprocessor(BaseComponent):
         with tempfile.NamedTemporaryFile(delete=False, suffix='.joblib') as fp:
             joblib.dump(pipe, fp.name)
         self.log.info("Preprocessing complete; shape=%s", X_processed.shape)
-        return X_processed, y.values, fp.name
+        return X_processed, y, fp.name
