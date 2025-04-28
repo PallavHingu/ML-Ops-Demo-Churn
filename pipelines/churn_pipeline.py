@@ -82,17 +82,16 @@ def train_component(
     X = np.load(X_in.path + ".npy", allow_pickle=True)
     y = np.load(y_in.path + ".npy", allow_pickle=True)
 
+    # Fix: handle different X loading cases
+    if isinstance(X, scipy.sparse.spmatrix):
+        print("Detected loaded X as a sparse matrix: converting to dense array…")
+        X = X.toarray()
+    elif isinstance(X, np.ndarray) and X.dtype == object:
+        print("Detected X as an object array: stacking sparse rows…")
+        X = scipy.sparse.vstack(X).toarray()
+
     print(f"X type: {type(X)}, is sparse: {scipy.sparse.issparse(X)}")
     print(f"y type: {type(y)}, shape: {y.shape}")
-
-    if scipy.sparse.issparse(X):
-        X = X.toarray()
-
-    if scipy.sparse.issparse(y):
-        y = y.toarray()
-
-    print(f"X1 type: {type(X)}, is sparse: {scipy.sparse.issparse(X)}")
-    print(f"y1 type: {type(y)}, shape: {y.shape}")
 
     print(f"X dtype: {X.dtype}")
     print(f"Sample X[0] type: {type(X[0])}")
