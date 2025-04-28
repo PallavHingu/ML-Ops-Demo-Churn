@@ -94,6 +94,10 @@ def train_component(
     print(f"X1 type: {type(X)}, is sparse: {scipy.sparse.issparse(X)}")
     print(f"y1 type: {type(y)}, shape: {y.shape}")
 
+    print(f"X dtype: {X.dtype}")
+    print(f"Sample X[0] type: {type(X[0])}")
+    print(f"Sample X[0]: {X[0]}")
+
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
     shutil.copy(model_path, model_artifact.path)
