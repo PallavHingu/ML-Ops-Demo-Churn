@@ -11,10 +11,15 @@ class DataPreprocessor(BaseComponent):
     def run(self, df: pd.DataFrame):
         self.log.info("Starting preprocessing …")
         df = df.copy()
+        print("df[churn]" + str(df['Churn']))
+        print("df['Churn'][0]" + df['Churn'][0])
         df['Churn'] = df['Churn'].map({'Yes':1,'No':0})
 
         X = df.drop('Churn', axis=1)
         y = df['Churn']
+
+        print("df[churn] 2" + str(df['Churn']))
+        print("df['Churn'][0] 2" + df['Churn'][0])
 
         cat_cols = X.select_dtypes(include=['object']).columns.tolist()
         num_cols = X.select_dtypes(exclude=['object']).columns.tolist()
