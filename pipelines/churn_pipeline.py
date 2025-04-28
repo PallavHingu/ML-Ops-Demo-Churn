@@ -53,13 +53,13 @@ def preprocess_component(
     X, y, pipe_path = pre.run(df)
 
     # Save numpy arrays for downstream steps
-    np.save(X_out.path, X)
-    np.save(y_out.path, y)
-    # X_save_path = X_out.path + ".npy"
-    # y_save_path = y_out.path + ".npy"
+    # np.save(X_out.path, X)
+    # np.save(y_out.path, y)
+    X_save_path = X_out.path + ".npy"
+    y_save_path = y_out.path + ".npy"
 
-    # np.save(X_save_path, X)
-    # np.save(y_save_path, y)
+    np.save(X_save_path, X)
+    np.save(y_save_path, y)
 
     shutil.copy(pipe_path, prep_pipe.path)
 
