@@ -59,6 +59,10 @@ def preprocess_component(
         print("Detected X as an object array: stacking sparse rows…")
         X = scipy.sparse.vstack(X).toarray()
 
+    if isinstance(y, scipy.sparse.spmatrix):
+        print("Detected loaded y as a sparse matrix: converting to dense array…")
+        y = y.toarray()
+
     # Save numpy arrays for downstream steps
     # np.save(X_out.path, X)
     # np.save(y_out.path, y)
@@ -102,7 +106,9 @@ def train_component(
 
     print(f"X dtype: {X.dtype}")
     print(f"Sample X[0] type: {type(X[0])}")
+    print(f"Sample y[0] type: {type(y[0])}")
     print(f"Sample X[0]: {X[0]}")
+    print(f"Sample y[0]: {y[0]}")
 
     trainer = ModelTrainer()
     _clf, model_path = trainer.run(X, y)
