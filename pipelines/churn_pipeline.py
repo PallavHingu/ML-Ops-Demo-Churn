@@ -62,6 +62,9 @@ def preprocess_component(
     if isinstance(y, scipy.sparse.spmatrix):
         print("Detected loaded y as a sparse matrix: converting to dense array…")
         y = y.toarray()
+    elif isinstance(T, np.ndarray) and X.dtype == object:
+        print("Detected Y as an object array: stacking sparse rows…")
+        y = scipy.sparse.vstack(X).toarray()
 
     print(f"Sample y[0] type: {type(y[0])}")
     print(f"Sample y[0]: {y[0]}")
